@@ -1,8 +1,9 @@
 import requests
 import json
 
+token = "7629edd01fdbb13225e5ffed34449294"
+
 def challenge_1():
-    token = "7629edd01fdbb13225e5ffed34449294"
     github = "https://github.com/veganafro/api_challenge"
     end_point = "http://challenge.code2040.org/api/register"
 
@@ -20,7 +21,6 @@ def challenge_1():
 
 
 def challenge_2():
-    token = "7629edd01fdbb13225e5ffed34449294"
     start_point = "http://challenge.code2040.org/api/reverse"
     end_point = "http://challenge.code2040.org/api/reverse/validate"
 
@@ -41,6 +41,28 @@ def challenge_2():
 
 
 
+def challenge_3():
+    start_point = "http://challenge.code2040.org/api/haystack"
+    end_point = "http://challenge.code2040.org/api/haystack/validate"
+
+    python_style_json = convert_json_file('results_2.json')
+
+    first_ret = requests.post(start_point, json=python_style_json)
+
+    dictionary = json.loads(first_ret.content)
+
+    needle = dictionary.get('needle')
+    location_of_needle = dictionary.get('haystack').index(needle)
+
+    python_style_json['needle'] = location_of_needle
+    write_json_file('results_2.json', python_style_json)
+
+    second_ret = requests.post(end_point, json=python_style_json)
+
+    print(second_ret.status_code)
+
+
+
 def write_json_file(filename, python_dict):
     with open(filename, 'w') as empty_json_file:
         json.dump(python_dict, empty_json_file, indent=4)
@@ -52,6 +74,8 @@ def convert_json_file(filename):
         full_json_file.close()
         return json_data
 
-#challenge_1()
 
-challenge_2()
+
+#challenge_1()
+#challenge_2()
+challenge_3()
