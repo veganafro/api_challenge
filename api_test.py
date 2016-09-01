@@ -1,5 +1,7 @@
 import requests
 import json
+import datetime
+import iso8601
 
 token = "7629edd01fdbb13225e5ffed34449294"
 
@@ -79,7 +81,32 @@ def challenge_4():
             non_matches.append(string)
 
     python_style_json['array'] = non_matches
-    write_json_file('results.json', python_style_json)
+    write_json_file('results_2.json', python_style_json)
+
+    second_ret = requests.post(end_point, json=python_style_json)
+    print(second_ret.status_code)
+
+
+
+def challenge_5():
+    start_point = "http://challenge.code2040.org/api/dating"
+    end_point = "http://challenge.code2040.org/api/dating/validate"
+
+    python_style_json = convert_json_file('results_2.json')
+
+    first_ret = requests.post(start_point, json=python_style_json)
+    print(first_ret.content)
+
+    dictionary = json.loads(first_ret.content)
+
+    date_stamp = dictionary.get('datestamp')
+    interval = dictionary.get('interval')
+
+    date_with_delta = iso8601.parse_date(date_stamp) + datetime.timedelta(seconds=interval)
+    print(date_with_delta.isoformat())
+
+    python_style_json['datestamp'] = date_with_delta.isoformat()[:len(date_with_delta.isoformat()) - 6] + "Z"
+    write_json_file('results_2.json', python_style_json)
 
     second_ret = requests.post(end_point, json=python_style_json)
     print(second_ret.status_code)
@@ -99,7 +126,8 @@ def convert_json_file(filename):
 
 
 
-#challenge_1()
-#challenge_2()
-#challenge_3()
+challenge_1()
+challenge_2()
+challenge_3()
 challenge_4()
+challenge_5()
