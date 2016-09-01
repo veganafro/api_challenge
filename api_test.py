@@ -15,7 +15,6 @@ def challenge_1():
     python_style_json = convert_json_file('results.json')
 
     ret = requests.post(end_point, json=python_style_json)
-
     print(ret.status_code)
 
 
@@ -36,7 +35,6 @@ def challenge_2():
     write_json_file('results_2.json', python_style_json)
 
     second_ret = requests.post(end_point, json=python_style_json)
-
     print(second_ret.status_code)
 
 
@@ -58,7 +56,32 @@ def challenge_3():
     write_json_file('results_2.json', python_style_json)
 
     second_ret = requests.post(end_point, json=python_style_json)
+    print(second_ret.status_code)
 
+
+
+def challenge_4():
+    start_point = "http://challenge.code2040.org/api/prefix"
+    end_point = "http://challenge.code2040.org/api/prefix/validate"
+
+    python_style_json = convert_json_file('results_2.json')
+
+    first_ret = requests.post(start_point, json=python_style_json)
+
+    dictionary = json.loads(first_ret.content)
+
+    prefix = dictionary.get('prefix')
+
+    non_matches = []
+
+    for string in dictionary.get('array'):
+        if prefix != string[:len(prefix)]:
+            non_matches.append(string)
+
+    python_style_json['array'] = non_matches
+    write_json_file('results.json', python_style_json)
+
+    second_ret = requests.post(end_point, json=python_style_json)
     print(second_ret.status_code)
 
 
@@ -78,4 +101,5 @@ def convert_json_file(filename):
 
 #challenge_1()
 #challenge_2()
-challenge_3()
+#challenge_3()
+challenge_4()
