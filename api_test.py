@@ -95,7 +95,6 @@ def challenge_5():
     python_style_json = convert_json_file('results_2.json')
 
     first_ret = requests.post(start_point, json=python_style_json)
-    print(first_ret.content)
 
     dictionary = json.loads(first_ret.content)
 
