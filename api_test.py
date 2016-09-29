@@ -3,18 +3,20 @@ import json
 import datetime
 import iso8601
 
+#define the global token variable that will need to be posted on each call to the API
 token = "7629edd01fdbb13225e5ffed34449294"
 
 def challenge_1():
+    #define the value for the github token and the endpoint url
     github = "https://github.com/veganafro/api_challenge"
     end_point = "http://challenge.code2040.org/api/register"
 
     data = {'token': token,
             'github': github}
 
-    write_json_file('results.json', data)
+    write_json_file('results_2.json', data)
 
-    python_style_json = convert_json_file('results.json')
+    python_style_json = convert_json_file('results_2.json')
 
     ret = requests.post(end_point, json=python_style_json)
     print(ret.status_code)
@@ -28,7 +30,6 @@ def challenge_2():
     data = {'token': token,
             'string': ""}
 
-    write_json_file('results_2.json', data)
     python_style_json = convert_json_file('results_2.json')
 
     first_ret = requests.post(start_point, json=python_style_json)
@@ -69,7 +70,7 @@ def challenge_4():
     python_style_json = convert_json_file('results_2.json')
 
     first_ret = requests.post(start_point, json=python_style_json)
-
+    
     dictionary = json.loads(first_ret.content)
 
     prefix = dictionary.get('prefix')
@@ -104,6 +105,7 @@ def challenge_5():
     date_with_delta = iso8601.parse_date(date_stamp) + datetime.timedelta(seconds=interval)
     print(date_with_delta.isoformat())
 
+    # bootleg solution to the issue of the isoformat() method returning +00:00 instead of Z for the time-zone
     python_style_json['datestamp'] = date_with_delta.isoformat()[:len(date_with_delta.isoformat()) - 6] + "Z"
     write_json_file('results_2.json', python_style_json)
 
