@@ -7,6 +7,21 @@ import iso8601
 #define the global token variable that will need to be posted on each call to the API
 token = "7629edd01fdbb13225e5ffed34449294"
 
+thread_lock = threading.Lock()
+
+class ThreadSolver(threading.Thread):
+
+    def __init__(self, thread_id, method_to_run):
+        threading.Thread.__init__(self)
+        self.thread_id = thread_id
+        self.method_to_run = method_to_run
+
+    def run(self):
+        print("Starting thread " + str(self.thread_id))
+        thread_lock.acquire()
+        self.method_to_run()
+        thread_lock.release()
+
 def challenge_1():
     #define the value for the github token and the endpoint url
     github = "https://github.com/veganafro/api_challenge"
@@ -21,8 +36,6 @@ def challenge_1():
 
     ret = requests.post(end_point, json=python_style_json)
     print(ret.status_code)
-
-
 
 def challenge_2():
     start_point = "http://challenge.code2040.org/api/reverse"
@@ -40,8 +53,6 @@ def challenge_2():
 
     second_ret = requests.post(end_point, json=python_style_json)
     print(second_ret.status_code)
-
-
 
 def challenge_3():
     start_point = "http://challenge.code2040.org/api/haystack"
@@ -62,8 +73,6 @@ def challenge_3():
     second_ret = requests.post(end_point, json=python_style_json)
     print(second_ret.status_code)
 
-
-
 def challenge_4():
     start_point = "http://challenge.code2040.org/api/prefix"
     end_point = "http://challenge.code2040.org/api/prefix/validate"
@@ -71,7 +80,7 @@ def challenge_4():
     python_style_json = convert_json_file('results_2.json')
 
     first_ret = requests.post(start_point, json=python_style_json)
-    
+
     dictionary = json.loads(first_ret.content)
 
     prefix = dictionary.get('prefix')
@@ -88,8 +97,6 @@ def challenge_4():
     second_ret = requests.post(end_point, json=python_style_json)
     print(second_ret.status_code)
 
-
-
 def challenge_5():
     start_point = "http://challenge.code2040.org/api/dating"
     end_point = "http://challenge.code2040.org/api/dating/validate"
@@ -104,7 +111,6 @@ def challenge_5():
     interval = dictionary.get('interval')
 
     date_with_delta = iso8601.parse_date(date_stamp) + datetime.timedelta(seconds=interval)
-    print(date_with_delta.isoformat())
 
     # bootleg solution to the issue of the isoformat() method returning +00:00 instead of Z for the time-zone
     python_style_json['datestamp'] = date_with_delta.isoformat()[:len(date_with_delta.isoformat()) - 6] + "Z"
@@ -127,9 +133,14 @@ def convert_json_file(filename):
         return json_data
 
 
+thread_one = ThreadSolver(1, challenge_1)
+thread_two = ThreadSolver(2, challenge_2)
+thread_three = ThreadSolver(3, challenge_3)
+thread_four = ThreadSolver(4, challenge_4)
+thread_five = ThreadSolver(5, challenge_5)
 
-challenge_1()
-challenge_2()
-challenge_3()
-challenge_4()
-challenge_5()
+thread_one.start()
+thread_two.start()
+thread_three.start()
+thread_four.start()
+thread_five.start()
