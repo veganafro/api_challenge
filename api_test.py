@@ -23,7 +23,6 @@ class ThreadSolver(threading.Thread):
         thread_lock.release()
 
 def challenge_1():
-    #define the value for the github token and the endpoint url
     github = "https://github.com/veganafro/api_challenge"
     end_point = "http://challenge.code2040.org/api/register"
 
@@ -40,9 +39,6 @@ def challenge_1():
 def challenge_2():
     start_point = "http://challenge.code2040.org/api/reverse"
     end_point = "http://challenge.code2040.org/api/reverse/validate"
-
-    data = {'token': token,
-            'string': ""}
 
     python_style_json = convert_json_file('results_2.json')
 
