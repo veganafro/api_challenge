@@ -3,9 +3,10 @@ import json
 import threading
 import datetime
 import iso8601
+import os
 
-#define the global token variable that will need to be posted on each call to the API
-token = "7629edd01fdbb13225e5ffed34449294"
+# define the global token variable that will need to be posted on each call to the API
+token = os.environ["API_TOKEN"]
 
 thread_lock = threading.Lock()
 
