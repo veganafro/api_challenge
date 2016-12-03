@@ -11,7 +11,6 @@ token = os.environ["API_TOKEN"]
 thread_lock = threading.Lock()
 
 class ThreadSolver(threading.Thread):
-
     def __init__(self, thread_id, method_to_run):
         threading.Thread.__init__(self)
         self.thread_id = thread_id
@@ -31,7 +30,6 @@ def challenge_1():
             'github': github}
 
     write_json_file('results_2.json', data)
-
     python_style_json = convert_json_file('results_2.json')
 
     ret = requests.post(end_point, json=python_style_json)
@@ -79,9 +77,7 @@ def challenge_4():
     first_ret = requests.post(start_point, json=python_style_json)
 
     dictionary = json.loads(first_ret.content)
-
     prefix = dictionary.get('prefix')
-
     non_matches = []
 
     for string in dictionary.get('array'):
@@ -106,7 +102,6 @@ def challenge_5():
 
     date_stamp = dictionary.get('datestamp')
     interval = dictionary.get('interval')
-
     date_with_delta = iso8601.parse_date(date_stamp) + datetime.timedelta(seconds=interval)
 
     # bootleg solution to the issue of the isoformat() method returning +00:00 instead of Z for the time-zone
